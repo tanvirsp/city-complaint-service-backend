@@ -1,0 +1,16 @@
+enum AuthProvider {
+  GOOGLE
+  CREDENTIAL
+}
+
+enum Role {
+  ADMIN
+  CITIZEN
+  STAFF
+}
+
+enum UserStatus {
+  ACTIVE
+  BLOCKED
+  DELETED
+}
