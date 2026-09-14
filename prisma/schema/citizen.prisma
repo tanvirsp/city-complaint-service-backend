@@ -16,5 +16,5 @@ model Citizen {
   //   appointments Apppointment[]
 
   @@index([email], name: "idx_citizen_email")
-  @@map("citizen")
+  @@map("citizens")
 }

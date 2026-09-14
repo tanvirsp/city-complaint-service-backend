@@ -23,6 +23,10 @@ export default {
   redis_host: process.env.REDIS_HOST!,
   redis_port: process.env.REDIS_PORT!,
 
+  cloudinary_cloud_name: process.env.CLOUDINARY_CLOUD_NAME!,
+  cloudinary_api_key: process.env.CLOUDINARY_API_KEY!,
+  cloudinary_api_secret: process.env.CLOUDINARY_API_SECRET!,
+
   ssl_commerz_store_id: process.env.SSL_COMMERZ_STORE_ID!,
   ssl_commerz_store_password: process.env.SSL_COMMERZ_STORE_PASSWORD!,
 };

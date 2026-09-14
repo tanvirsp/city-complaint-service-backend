@@ -19,3 +19,9 @@ enum CategoryType {
   COMPLAINT
   SERVICE
 }
+
+enum StaffVerificationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
