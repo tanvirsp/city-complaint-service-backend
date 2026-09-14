@@ -11,6 +11,9 @@ router.post("/verify-email", authController.verifyCitizenEmail);
 router.post("/login", authController.loginUser);
 router.post("/refresh-token", authController.refreshToken);
 router.post("/google", authController.googleLogin);
+router.post("/forgot-password", authController.forgotPassword);
+
+router.post("/reset-password", authController.resetPassword);
 
 router.get(
   "/me",

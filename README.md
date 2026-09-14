@@ -1,4 +1,4 @@
-# Rent Nest 🏠
+# City Complaint & Service Platform 🏙️
 
 **"Find & List Rental Properties with Ease"**
 
@@ -6,7 +6,7 @@
 
 ## Project Overview
 
-RentNest is a backend API for a rental property marketplace. Landlords can list properties, manage availability, and approve or reject rental requests. Tenants can browse listings, submit rental requests, and leave reviews. Admins oversee the entire platform, managing users and moderating content.
+City Complaint & Service is a backend API for a rental property marketplace. Landlords can list properties, manage availability, and approve or reject rental requests. Tenants can browse listings, submit rental requests, and leave reviews. Admins oversee the entire platform, managing users and moderating content.
 
 ---
 

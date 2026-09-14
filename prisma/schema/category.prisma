@@ -1,0 +1,13 @@
+model Category {
+    id   String @id @default(uuid())
+    name String @db.VarChar(255)
+
+    type CategoryType @default(COMPLAINT)
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    //staff
+
+    @@map("categories")
+}
