@@ -1,6 +1,7 @@
 import type { UploadApiResponse } from "cloudinary";
 import { cloudinary } from "../../lib/cloudinary";
 import { prisma } from "../../lib/prisma";
+import { IUpdatePayload } from "./user.interface";
 
 const uploadProfileImage = async (buffer: Buffer, userId: string) => {
   const currentUser = await prisma.user.findUnique({
@@ -54,6 +55,34 @@ const uploadProfileImage = async (buffer: Buffer, userId: string) => {
   return updatedUser;
 };
 
+const getMyProfile = async (userId: string) => {
+  const user = await prisma.user.findFirstOrThrow({
+    where: { id: userId },
+    include: {
+      citizen: true,
+    },
+    omit: {
+      password: true,
+    },
+  });
+
+  return user;
+};
+
+const updateProfile = async (userId: string, payload: IUpdatePayload) => {
+  const user = await prisma.user.update({
+    where: { id: userId },
+    data: payload,
+    omit: {
+      password: true,
+    },
+  });
+
+  return user;
+};
+
 export const userServices = {
   uploadProfileImage,
+  getMyProfile,
+  updateProfile,
 };

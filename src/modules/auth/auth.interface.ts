@@ -19,13 +19,6 @@ export interface ILogin {
   password: string;
 }
 
-export interface IUpdatePayload {
-  name: string;
-  email: string;
-  phone?: string;
-  avatar?: string;
-}
-
 export interface IGoogleLoginPayload {
   idToken: string;
 }

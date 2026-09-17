@@ -79,35 +79,6 @@ const loginUser = catchAsync(
   },
 );
 
-const getMyProfile = catchAsync(
-  async (req: Request, res: Response, next: NextFunction) => {
-    const userId = req.user?.id as string;
-
-    const result = await authService.getMyProfile(userId);
-    sendResponse(res, {
-      success: true,
-      statusCode: httpStatus.OK,
-      message: "Profile get successfully",
-      data: result,
-    });
-  },
-);
-
-const updateProfile = catchAsync(
-  async (req: Request, res: Response, next: NextFunction) => {
-    const userId = req.user?.id as string;
-    const payload = req.body;
-
-    const result = await authService.updateProfile(userId, payload);
-    sendResponse(res, {
-      success: true,
-      statusCode: httpStatus.OK,
-      message: "Profile update successfully",
-      data: result,
-    });
-  },
-);
-
 const refreshToken = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const refreshToken = req.cookies.refreshToken;
@@ -192,8 +163,6 @@ const resetPassword = catchAsync(async (req: Request, res: Response) => {
 export const authController = {
   registerUser,
   loginUser,
-  getMyProfile,
-  updateProfile,
   refreshToken,
   googleLogin,
   verifyCitizenEmail,

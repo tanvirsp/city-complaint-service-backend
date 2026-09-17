@@ -1,0 +1,23 @@
+model Complaint {
+    id                  String          @id @default(uuid())
+    title               String
+    categoryId          String
+    category            Category        @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+    description         String
+    location            String
+    priority            Priority        @default(MEDIUM)
+    status              ComplaintStatus @default(PENDING)
+    beforeImageUrl      String          @default("")
+    beforeImagePublicId String          @default("")
+    afterImageUrl       String          @default("")
+    afterImagePublicId  String          @default("")
+    rejectReason        String?
+    createdAt           DateTime        @default(now())
+    updatedAt           DateTime        @updatedAt
+    citizenId           String
+    citizen             Citizen         @relation(fields: [citizenId], references: [id], onDelete: Restrict)
+    staffId             String
+    staff               Staff           @relation(fields: [staffId], references: [id], onDelete: Restrict)
+
+    @@map("complaints")
+}

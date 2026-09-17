@@ -8,6 +8,9 @@ import { notFound } from "./middlewares/notFound";
 import { globalErrorHandler } from "./middlewares/globalErrorHandler";
 import { categoryRoutes } from "./modules/category/category.route";
 import { userRoutes } from "./modules/user/user.route";
+import { staffRoutes } from "./modules/staff/staff.route";
+import { adminRoutes } from "./modules/admin/admin.route";
+import { complaintRoutes } from "./modules/complaint/complaint.route";
 
 const app: Application = express();
 
@@ -34,6 +37,8 @@ app.get("/", (req: Request, res: Response) => {
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/user", userRoutes);
 app.use("/api/v1/category", categoryRoutes);
+app.use("/api/v1/admin", adminRoutes);
+app.use("/api/v1/complaint", complaintRoutes);
 
 app.use(notFound);
 app.use(globalErrorHandler);

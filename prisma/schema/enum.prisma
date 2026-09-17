@@ -25,3 +25,16 @@ enum StaffVerificationStatus {
   APPROVED
   REJECTED
 }
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum ComplaintStatus {
+  PENDING
+  ONGING
+  COMPLETE
+  REJECTED
+}

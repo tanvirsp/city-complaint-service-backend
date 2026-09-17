@@ -12,7 +12,6 @@ import {
   ILogin,
   IRegisterCitizenPayload,
   IResetPasswordPayload,
-  IUpdatePayload,
   IVerifyEmailPayload,
 } from "./auth.interface";
 import bcrypt from "bcryptjs";
@@ -252,32 +251,6 @@ const loginUser = async (payload: ILogin) => {
   );
 
   return { accessToken, refreshToken };
-};
-
-const getMyProfile = async (userId: string) => {
-  const user = await prisma.user.findFirstOrThrow({
-    where: { id: userId },
-    include: {
-      citizen: true,
-    },
-    omit: {
-      password: true,
-    },
-  });
-
-  return user;
-};
-
-const updateProfile = async (userId: string, payload: IUpdatePayload) => {
-  const user = await prisma.user.update({
-    where: { id: userId },
-    data: payload,
-    omit: {
-      password: true,
-    },
-  });
-
-  return user;
 };
 
 const refreshToken = async (refreshToken: string) => {
@@ -616,8 +589,6 @@ const resetPassword = async (payload: IResetPasswordPayload) => {
 export const authService = {
   registerUser,
   loginUser,
-  getMyProfile,
-  updateProfile,
   refreshToken,
   googleLogin,
   verifyCitizenEmail,
