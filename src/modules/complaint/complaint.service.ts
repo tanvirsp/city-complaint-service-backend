@@ -1,37 +1,105 @@
-import bcrypt from "bcryptjs";
+import { UploadApiResponse } from "cloudinary";
 import { prisma } from "../../lib/prisma";
+import { cloudinary } from "../../lib/cloudinary";
+import { IRequestUser } from "../../middlewares/auth";
+import { IComplainCreate, IStatusUpdate } from "./complaint.interface";
+import { IQuery } from "../../interfaces";
+import { ComplaintWhereInput } from "../../../generated/prisma/models";
 
-import config from "../../config";
-
-const addComplaint = async (payload: any) => {
-  const {
-    name,
-    email,
-    categoryId,
-    experienceYears,
-    contactNumber,
-    password,
-    role,
-  } = payload;
-
-  const hashedPassword = await bcrypt.hash(
-    password,
-    Number(config.bcrypt_salt_rounds),
+const addComplaint = async (
+  payload: IComplainCreate,
+  user: IRequestUser,
+  buffer: Buffer,
+) => {
+  const cloudinaryResult = await new Promise<UploadApiResponse>(
+    (resolve, reject) => {
+      cloudinary.uploader
+        .upload_stream(
+          {
+            resource_type: "auto",
+          },
+          async (error, result) => {
+            if (error) {
+              return reject(error);
+            }
+            if (!result) {
+              return reject(new Error("No result returned from Cloudinary"));
+            }
+            resolve(result);
+          },
+        )
+        .end(buffer);
+    },
   );
 
-  const result = await prisma.user.create({
+  const result = await prisma.complaint.create({
     data: {
-      name,
-      email,
-      password: hashedPassword,
-      role,
-      staff: {
-        create: {
-          name,
-          email,
-          categoryId,
-          experienceYears: Number(experienceYears),
-          contactNumber,
+      ...payload,
+      userId: user.id,
+      beforeImageUrl: cloudinaryResult.secure_url,
+      beforeImagePublicId: cloudinaryResult.public_id,
+    },
+  });
+
+  return result;
+};
+
+const myComplaint = async (userId: string, query: IQuery) => {
+  const limit = query.limit ? Number(query.limit) : 10;
+  const page = query.page ? Number(query.page) : 1;
+  const skip = (page - 1) * limit;
+
+  const andConditions: ComplaintWhereInput[] = [];
+
+  //Searching
+  if (query.searchTerm) {
+    andConditions.push({
+      OR: [{ title: { contains: query.searchTerm, mode: "insensitive" } }],
+    });
+  }
+
+  const allComplaint = await prisma.complaint.findMany({
+    where: {
+      AND: andConditions,
+    },
+    take: limit,
+    skip: skip,
+    orderBy: {
+      createdAt: "desc",
+    },
+    include: {
+      staff: true,
+    },
+  });
+
+  const totalMyComplaintCount = await prisma.complaint.count({
+    where: {
+      AND: andConditions,
+    },
+  });
+
+  return {
+    data: allComplaint,
+    meta: {
+      page: page,
+      limit: limit,
+      total: totalMyComplaintCount,
+      totalPages: Math.ceil(totalMyComplaintCount / limit),
+    },
+  };
+};
+
+const complaintDetails = async (complaintId: string) => {
+  const result = await prisma.complaint.findFirst({
+    where: {
+      id: complaintId,
+    },
+    include: {
+      staff: true,
+      user: {
+        select: {
+          name: true,
+          email: true,
         },
       },
     },
@@ -40,6 +108,26 @@ const addComplaint = async (payload: any) => {
   return result;
 };
 
+const complaintUpdateStatus = async (payload: IStatusUpdate) => {
+  const { id, status } = payload;
+  const result = await prisma.complaint.update({
+    where: {
+      id,
+    },
+    data: {
+      status,
+    },
+  });
+
+  return result;
+};
+
+const completeComplaint = async (payload: any) => {};
+
 export const complaintService = {
   addComplaint,
+  myComplaint,
+  complaintDetails,
+  complaintUpdateStatus,
+  completeComplaint,
 };

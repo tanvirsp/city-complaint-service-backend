@@ -445,7 +445,7 @@ const googleLogin = async (payload: IGoogleLoginPayload) => {
   };
 };
 
-const forgotPassword = async (payload: IForgotPasswordPayload) => {
+const forgetPassword = async (payload: IForgotPasswordPayload) => {
   const { email } = payload;
 
   const isUserExist = await prisma.user.findUnique({
@@ -592,6 +592,6 @@ export const authService = {
   refreshToken,
   googleLogin,
   verifyCitizenEmail,
-  forgotPassword,
+  forgetPassword,
   resetPassword,
 };

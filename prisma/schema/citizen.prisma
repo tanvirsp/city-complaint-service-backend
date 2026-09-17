@@ -13,8 +13,6 @@ model Citizen {
   userId String @unique
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
-  complaints Complaint[]
-
   @@index([email], name: "idx_citizen_email")
   @@map("citizens")
 }

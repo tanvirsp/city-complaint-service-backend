@@ -6,15 +6,17 @@ import { prisma } from "../lib/prisma";
 import { catchAsync } from "../utils/catchAsync";
 import { jwtUtils } from "../utils/jwt";
 
+export interface IRequestUser {
+  email: string;
+  name: string;
+  id: string;
+  role: Role;
+}
+
 declare global {
   namespace Express {
     interface Request {
-      user?: {
-        email: string;
-        name: string;
-        id: string;
-        role: Role;
-      };
+      user?: IRequestUser;
     }
   }
 }

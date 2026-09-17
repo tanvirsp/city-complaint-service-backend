@@ -34,7 +34,8 @@ enum Priority {
 
 enum ComplaintStatus {
   PENDING
-  ONGING
-  COMPLETE
+  ASSIGNED
+  IN_PROGRESS
+  RESOLVED
   REJECTED
 }

@@ -134,10 +134,10 @@ const googleLogin = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-const forgotPassword = catchAsync(async (req: Request, res: Response) => {
+const forgetPassword = catchAsync(async (req: Request, res: Response) => {
   const payload = req.body;
 
-  await authService.forgotPassword(payload);
+  await authService.forgetPassword(payload);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -166,6 +166,6 @@ export const authController = {
   refreshToken,
   googleLogin,
   verifyCitizenEmail,
-  forgotPassword,
+  forgetPassword,
   resetPassword,
 };
