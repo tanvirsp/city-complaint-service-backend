@@ -2,7 +2,11 @@ import { UploadApiResponse } from "cloudinary";
 import { prisma } from "../../lib/prisma";
 import { cloudinary } from "../../lib/cloudinary";
 import { IRequestUser } from "../../middlewares/auth";
-import { IComplainCreate, IStatusUpdate } from "./complaint.interface";
+import {
+  IAssignToStaff,
+  IComplainCreate,
+  IStatusUpdate,
+} from "./complaint.interface";
 import { IQuery } from "../../interfaces";
 import { ComplaintWhereInput } from "../../../generated/prisma/models";
 
@@ -161,10 +165,26 @@ const completeComplaint = async (payload: any, buffer: Buffer) => {
   return updateComplaint;
 };
 
+const assignComplaintToStaff = async (payload: IAssignToStaff) => {
+  const { complaintId, staffId } = payload;
+  const result = await prisma.complaint.update({
+    where: {
+      id: complaintId,
+    },
+    data: {
+      staffId,
+      status: "ASSIGNED",
+    },
+  });
+
+  return result;
+};
+
 export const complaintService = {
   addComplaint,
   myComplaint,
   complaintDetails,
   complaintUpdateStatus,
   completeComplaint,
+  assignComplaintToStaff,
 };

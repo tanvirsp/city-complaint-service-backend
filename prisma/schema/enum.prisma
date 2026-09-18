@@ -39,3 +39,11 @@ enum ComplaintStatus {
   RESOLVED
   REJECTED
 }
+
+enum ServiceStatus {
+  PENDING
+  ASSIGNED
+  IN_PROGRESS
+  RESOLVED
+  REJECTED
+}

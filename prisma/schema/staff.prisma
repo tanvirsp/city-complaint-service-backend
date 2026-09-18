@@ -15,9 +15,10 @@ model Staff {
     updatedAt       DateTime  @updatedAt
 
     //relations
-    userId    String      @unique
-    user      User        @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    complaint Complaint[]
+    userId         String           @unique
+    user           User             @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    complaint      Complaint[]
+    serviceRequest ServiceRequest[]
 
     @@map("staffs")
 }

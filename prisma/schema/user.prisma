@@ -15,9 +15,10 @@ model User {
   createdAt     DateTime     @default(now())
   updatedAt     DateTime     @updatedAt
 
-  citizen  Citizen?
-  staff    Staff?
-  complain Complaint[]
+  citizen        Citizen?
+  staff          Staff?
+  complain       Complaint[]
+  serviceRequest ServiceRequest[]
 
   @@map("users")
 }

@@ -37,4 +37,10 @@ router.patch(
   complaintController.completeComplaint,
 );
 
+router.patch(
+  "/assign-to-staff",
+  auth(Role.ADMIN),
+  complaintController.assignComplaintToStaff,
+);
+
 export const complaintRoutes = router;
