@@ -79,14 +79,23 @@ const complaintUpdateStatus = catchAsync(
 
 const completeComplaint = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const payload = req.body;
+    const payload = JSON.parse(req.body.data);
 
-    const result = await complaintService.completeComplaint(payload);
+    // const user = req.user!;
+
+    if (!req.file) {
+      throw new AppError(httpStatus.BAD_REQUEST, "No Image Provided.");
+    }
+
+    const result = await complaintService.completeComplaint(
+      payload,
+      req.file?.buffer,
+    );
 
     sendResponse(res, {
       success: true,
       statusCode: httpStatus.CREATED,
-      message: "Complaint status update successfully",
+      message: "Complaint is completed successfully",
       data: result,
     });
   },

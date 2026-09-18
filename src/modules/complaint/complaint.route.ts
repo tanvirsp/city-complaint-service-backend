@@ -33,6 +33,7 @@ router.patch(
 router.patch(
   "/complate",
   auth(Role.STAFF),
+  upload.single("complaintImage"),
   complaintController.completeComplaint,
 );
 

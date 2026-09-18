@@ -122,7 +122,44 @@ const complaintUpdateStatus = async (payload: IStatusUpdate) => {
   return result;
 };
 
-const completeComplaint = async (payload: any) => {};
+const completeComplaint = async (payload: any, buffer: Buffer) => {
+  const { complaintId, status, rejectReason } = payload;
+
+  const cloudinaryResult = await new Promise<UploadApiResponse>(
+    (resolve, reject) => {
+      cloudinary.uploader
+        .upload_stream(
+          {
+            resource_type: "auto",
+          },
+          async (error, result) => {
+            if (error) {
+              return reject(error);
+            }
+            if (!result) {
+              return reject(new Error("No result returned from Cloudinary"));
+            }
+            resolve(result);
+          },
+        )
+        .end(buffer);
+    },
+  );
+
+  const updateComplaint = prisma.complaint.update({
+    where: {
+      id: complaintId,
+    },
+    data: {
+      status,
+      afterImageUrl: cloudinaryResult.secure_url,
+      afterImagePublicId: cloudinaryResult.public_id,
+      rejectReason: rejectReason ? rejectReason : "",
+    },
+  });
+
+  return updateComplaint;
+};
 
 export const complaintService = {
   addComplaint,

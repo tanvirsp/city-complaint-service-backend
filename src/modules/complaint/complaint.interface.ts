@@ -12,3 +12,9 @@ export interface IStatusUpdate {
   id: string;
   status: ComplaintStatus;
 }
+
+export interface ICompleteComplaint {
+  complaintId: string;
+  status: ComplaintStatus;
+  rejectReason?: string;
+}
