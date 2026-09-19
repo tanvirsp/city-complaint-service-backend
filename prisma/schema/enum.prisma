@@ -47,3 +47,15 @@ enum ServiceStatus {
   RESOLVED
   REJECTED
 }
+
+enum PaymentStatus {
+  UNPAID
+  PAID
+  FAILED
+  CANCELLED
+  REFUNDED
+}
+
+enum PaymentProvider {
+  SSLCOMMERZ
+}
