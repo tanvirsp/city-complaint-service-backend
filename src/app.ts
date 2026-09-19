@@ -8,11 +8,11 @@ import { notFound } from "./middlewares/notFound";
 import { globalErrorHandler } from "./middlewares/globalErrorHandler";
 import { categoryRoutes } from "./modules/category/category.route";
 import { userRoutes } from "./modules/user/user.route";
-import { staffRoutes } from "./modules/staff/staff.route";
 import { adminRoutes } from "./modules/admin/admin.route";
 import { complaintRoutes } from "./modules/complaint/complaint.route";
 import { serviceRoutes } from "./modules/service/service.route";
 import { serviceRequestRoutes } from "./modules/serviceRequest/serviceRequest.route";
+import { paymentRoutes } from "./modules/payment/payment.route";
 
 const app: Application = express();
 
@@ -43,6 +43,7 @@ app.use("/api/v1/admin", adminRoutes);
 app.use("/api/v1/complaint", complaintRoutes);
 app.use("/api/v1/service", serviceRoutes);
 app.use("/api/v1/service-request", serviceRequestRoutes);
+app.use("/api/v1/payment", paymentRoutes);
 
 app.use(notFound);
 app.use(globalErrorHandler);
