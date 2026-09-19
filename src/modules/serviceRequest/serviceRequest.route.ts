@@ -11,4 +11,10 @@ router.post(
   serviceRequestController.addServiceRequest,
 );
 
+router.get(
+  "/my",
+  auth(Role.CITIZEN),
+  serviceRequestController.myServiceRequest,
+);
+
 export const serviceRequestRoutes = router;

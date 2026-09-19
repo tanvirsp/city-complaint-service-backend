@@ -1,5 +1,11 @@
 model ServiceRequest {
-    id         String  @id @default(uuid())
+    id            String        @id @default(uuid())
+    title         String
+    description   String?
+    address       String
+    contactNumber String
+    status        ServiceStatus @default(PENDING)
+
     userId     String
     user       User    @relation(fields: [userId], references: [id], onDelete: Restrict)
     serviceId  String
@@ -8,10 +14,7 @@ model ServiceRequest {
     staff      Staff?  @relation(fields: [staffId], references: [id], onDelete: Restrict)
     serviceFee Decimal @db.Decimal(10, 2)
 
-    description   String?
-    address       String
-    contactNumber String
-    status        ServiceStatus @default(PENDING)
+    payment Payment?
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt

@@ -1,23 +1,26 @@
 model Payment {
-    id               String          @id @default(uuid())
-    serviceRequestId String
-    userId           String
-    user             User            @relation(fields: [userId], references: [id], onDelete: Cascade)
-    amount           Decimal         @db.Decimal(10, 2)
-    currency         String          @default("BDT")
-    provider         PaymentProvider
-    paymentMethod    String?
-    transactionId    String?         @unique
-    valId            String?
-    status           PaymentStatus   @default(UNPAID)
-    gatewayResponse  Json?
-    paidAt           DateTime?
-    refundTrxId      String?
-    refundAmount     Decimal?        @db.Decimal(10, 2)
-    refundReason     String?
-    refundedAt       DateTime?
-    createdAt        DateTime        @default(now())
-    updatedAt        DateTime        @updatedAt
+    id String @id @default(uuid())
+
+    serviceRequestId String         @unique
+    serviceRequest   ServiceRequest @relation(fields: [serviceRequestId], references: [id], onDelete: Cascade)
+
+    userId          String
+    user            User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+    amount          Decimal         @db.Decimal(10, 2)
+    currency        String          @default("BDT")
+    provider        PaymentProvider
+    paymentMethod   String?
+    transactionId   String?         @unique
+    valId           String?
+    status          PaymentStatus   @default(UNPAID)
+    gatewayResponse Json?
+    paidAt          DateTime?
+    refundTrxId     String?
+    refundAmount    Decimal?        @db.Decimal(10, 2)
+    refundReason    String?
+    refundedAt      DateTime?
+    createdAt       DateTime        @default(now())
+    updatedAt       DateTime        @updatedAt
 
     @@index([userId])
     @@index([status])

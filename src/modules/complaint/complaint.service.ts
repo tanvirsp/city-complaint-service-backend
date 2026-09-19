@@ -53,7 +53,7 @@ const myComplaint = async (userId: string, query: IQuery) => {
   const page = query.page ? Number(query.page) : 1;
   const skip = (page - 1) * limit;
 
-  const andConditions: ComplaintWhereInput[] = [];
+  const andConditions: ComplaintWhereInput[] = [{ userId: userId }];
 
   //Searching
   if (query.searchTerm) {
