@@ -11,11 +11,11 @@ router.post("/success", paymentController.paymentSuccess);
 router.post("/fail", paymentController.paymentFail);
 router.post("/cancel", paymentController.paymentCancel);
 
-// router.get("/", paymentController.paymentHistory);
-// router.get(
-//   "/:id",
-//   auth(Role.TENANT, Role.LANDLORD, Role.ADMIN),
-//   paymentController.paymentDetails,
-// );
+router.get("/my", paymentController.paymentHistory);
+router.get(
+  "/:id",
+  auth(Role.CITIZEN, Role.ADMIN),
+  paymentController.paymentDetails,
+);
 
 export const paymentRoutes = router;

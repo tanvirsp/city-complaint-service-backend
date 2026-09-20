@@ -18,6 +18,20 @@ const addNewStaff = catchAsync(
   },
 );
 
+const getAllComplaint = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const result = await adminService.getAllComplaint(req.query);
+
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.CREATED,
+      message: "All complaint retrieved successfully",
+      data: result,
+    });
+  },
+);
+
 export const adminController = {
   addNewStaff,
+  getAllComplaint,
 };

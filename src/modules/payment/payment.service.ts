@@ -8,9 +8,7 @@ import { prisma } from "../../lib/prisma";
 import { JwtPayload } from "jsonwebtoken";
 import { PaymentProvider } from "../../../generated/prisma/enums";
 
-const initiatePayment = async (payload: any, user: JwtPayload) => {
-  const { serviceRequestId, provider } = payload;
-
+const initiatePayment = async (serviceRequestId: string, user: JwtPayload) => {
   //Find Service Request
 
   const serviceRequest = await prisma.serviceRequest.findUnique({
@@ -34,7 +32,6 @@ const initiatePayment = async (payload: any, user: JwtPayload) => {
     throw new Error("Sorry that service is not available");
   }
 
-  // Total Ammount Calculate
   const totalAmount = Number(service.serviceFee);
 
   const tran_id = `TAN${Math.floor(1000000 + Math.random() * 9000000)}`;
@@ -57,9 +54,9 @@ const initiatePayment = async (payload: any, user: JwtPayload) => {
     total_amount: totalAmount,
     currency: "BDT",
     tran_id: tran_id,
-    success_url: `${config.app_url}/api/v1/payments/success`,
-    fail_url: `${config.app_url}/api/v1/payments/fail`,
-    cancel_url: `${config.app_url}/api/v1/payments/cancel`,
+    success_url: `${config.app_url}/api/v1/payment/success`,
+    fail_url: `${config.app_url}/api/v1/payment/fail`,
+    cancel_url: `${config.app_url}/api/v1/payment/cancel`,
     cus_name: user.name,
     cus_email: user.email,
     cus_add1: "N/A",
@@ -139,9 +136,9 @@ const paymentFail = async (payload: SSLCommerzPaymentFailResponse) => {
   });
 };
 
-const paymentHistory = async (tenantId: string) => {
+const paymentHistory = async (userId: string) => {
   const result = await prisma.payment.findMany({
-    where: { tenantId },
+    where: { userId },
   });
 
   return result;
@@ -153,22 +150,12 @@ const paymentDetails = async (paymentId: string) => {
       id: paymentId,
     },
     include: {
-      tenant: {
+      serviceRequest: true,
+      staff: {
         select: {
           name: true,
-          email: true,
-          phone: true,
-          avatar: true,
-        },
-      },
-      rentalRequest: {
-        select: {
-          id: true,
-          propertyId: true,
-          moveInDate: true,
-          leaseMonths: true,
-          status: true,
-          message: true,
+          address: true,
+          contactNumber: true,
         },
       },
     },

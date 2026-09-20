@@ -7,15 +7,15 @@ import { JwtPayload } from "jsonwebtoken";
 
 const createPayment = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const payload = req.body;
+    const serviceRequestId = req.body.serviceRequestId;
 
-    if (!payload.serviceRequestId) {
+    if (!serviceRequestId) {
       throw new Error("Service Request Id is required");
     }
 
     const user = req.user as JwtPayload;
 
-    const result = await paymentService.initiatePayment(payload, user);
+    const result = await paymentService.initiatePayment(serviceRequestId, user);
 
     sendResponse(res, {
       success: true,
@@ -47,36 +47,33 @@ const paymentFail = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     await paymentService.paymentFail(req.body);
 
-    // sendResponse(res, {
-    //   success: false,
-    //   statusCode: httpStatus.BAD_REQUEST,
-    //   message: "Payment Fail",
-    //   data: "",
-    // });
-    return res.redirect(
-      `https://rent-nest-frontend-d9fl.vercel.app/payment/fail`,
-    );
+    sendResponse(res, {
+      success: false,
+      statusCode: httpStatus.BAD_REQUEST,
+      message: "Payment Fail",
+      data: "",
+    });
   },
 );
 
 const paymentCancel = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    // sendResponse(res, {
-    //   success: false,
-    //   statusCode: httpStatus.BAD_REQUEST,
-    //   message: "Your payment has been cancel",
-    //   data: "",
-    // });
-    return res.redirect(
-      `https://rent-nest-frontend-d9fl.vercel.app/payment/cancel`,
-    );
+    sendResponse(res, {
+      success: false,
+      statusCode: httpStatus.BAD_REQUEST,
+      message: "Your payment has been cancel",
+      data: "",
+    });
+    // return res.redirect(
+    //   `https://rent-nest-frontend-d9fl.vercel.app/payment/cancel`,
+    // );
   },
 );
 
 const paymentHistory = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const tenantId = req.user?.id as string;
-    const result = await paymentService.paymentHistory(tenantId);
+    const userId = req.user?.id as string;
+    const result = await paymentService.paymentHistory(userId);
 
     sendResponse(res, {
       success: true,
