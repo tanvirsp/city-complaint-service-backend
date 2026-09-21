@@ -27,8 +27,3 @@ export interface ICompleteComplaint {
   status: ComplaintStatus;
   rejectReason?: string;
 }
-
-export interface IAssignToStaff {
-  complaintId: string;
-  staffId: string;
-}

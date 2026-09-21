@@ -4,7 +4,6 @@ import { cloudinary } from "../../lib/cloudinary";
 import { IRequestUser } from "../../middlewares/auth";
 import httpStatus from "http-status";
 import {
-  IAssignToStaff,
   IComplainCreate,
   IComplainUpdate,
   IStatusUpdate,
@@ -168,21 +167,6 @@ const completeComplaint = async (payload: any, buffer: Buffer) => {
   return updateComplaint;
 };
 
-const assignComplaintToStaff = async (payload: IAssignToStaff) => {
-  const { complaintId, staffId } = payload;
-  const result = await prisma.complaint.update({
-    where: {
-      id: complaintId,
-    },
-    data: {
-      staffId,
-      status: "ASSIGNED",
-    },
-  });
-
-  return result;
-};
-
 const updateComplaint = async (payload: IComplainUpdate, userId: string) => {
   const { id, ...restData } = payload;
   const ownRecord = await prisma.complaint.findFirst({
@@ -215,6 +199,5 @@ export const complaintService = {
   complaintDetails,
   complaintUpdateStatus,
   completeComplaint,
-  assignComplaintToStaff,
   updateComplaint,
 };

@@ -72,10 +72,42 @@ const updateUserStatus = catchAsync(
   },
 );
 
+const assignComplaintToStaff = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const payload = req.body;
+
+    const result = await adminService.assignComplaintToStaff(payload);
+
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "Assign staff to complaint successfully",
+      data: result,
+    });
+  },
+);
+
+const assignServiceRequestToStaff = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const payload = req.body;
+
+    const result = await adminService.assignServiceRequestToStaff(payload);
+
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "Assign staff to service request successfully",
+      data: result,
+    });
+  },
+);
+
 export const adminController = {
   addNewStaff,
   getAllComplaint,
   getAllServiceRequest,
   allUsers,
   updateUserStatus,
+  assignComplaintToStaff,
+  assignServiceRequestToStaff,
 };

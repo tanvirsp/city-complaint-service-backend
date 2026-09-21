@@ -1,24 +1,24 @@
 # City Complaint & Service Platform 🏙️
 
-**"Find & List Rental Properties with Ease"**
+**"Find a service door to door"**
 
 ---
 
 ## Project Overview
 
-City Complaint & Service is a backend API for a rental property marketplace. Landlords can list properties, manage availability, and approve or reject rental requests. Tenants can browse listings, submit rental requests, and leave reviews. Admins oversee the entire platform, managing users and moderating content.
+City Complaint & Service is a backend API for a service and complaint Agency. Citizen can buy service by paying amount or complate by free like rode damage, Lamp light missing, Cleaning etc
 
 ---
 
 ## Roles & Permissions
 
-| Role         | Description                         | Key Permissions                                                        |
-| ------------ | ----------------------------------- | ---------------------------------------------------------------------- |
-| **Tenant**   | Users looking for rental properties | Browse listings, submit rental requests, leave reviews, manage profile |
-| **Landlord** | Property owners who list rentals    | Create/manage listings, approve/reject requests, view tenant history   |
-| **Admin**    | Platform moderators                 | Manage all users, oversee all listings & requests, manage categories   |
+| Role        | Description                          | Key Permissions                                                                      |
+| ----------- | ------------------------------------ | ------------------------------------------------------------------------------------ |
+| **CITIZEN** | Users looking for service properties | order service or complaint                                                           |
+| **STAFF**   | service provider                     | complete the service or complaint                                                    |
+| **ADMIN**   | Platform moderators                  | Manage all users, oversee all serivices and complaint requests and manage categories |
 
-> 💡 **Note**: Users select their role during registration.
+> 💡 **Note**: ADMIN can create STAFF .
 
 ---
 
@@ -26,35 +26,28 @@ City Complaint & Service is a backend API for a rental property marketplace. Lan
 
 ### Public Features
 
-- Browse all available rental properties
-- Search and filter by location, price range, property type, and amenities
-- View detailed property listings
+- Browse all available services
 
-### Tenant Features
+### Citizen Features
 
-- Register and login as tenant
-- Submit rental requests for properties
-- **Make payments via SSLCommerz after rental request is approved**
-- **View payment history and payment status**
-- View rental request history (pending, approved, rejected)
-- Leave reviews after a completed rental
-- Manage Own profile
+- Register and login as cizitzen using google mail or creadential
+- Submit service request or complaint
+- Make payments via SSLCommerz
+- View payment history and payment status\*\*
+- View service request history (pending, approved, rejected)
 
-### Landlord Features
+### Staff Features
 
-- Register and login as landlord
-- Create, edit, and remove property listings
-- Set property availability status
-- Approve or reject rental requests
-- View rental history and tenant reviews
-- Manage Own profile
+- Register by admin
+- Edit service status like on-going | complate
+- View all own service request
 
 ### Admin Features
 
-- View all users (tenants and landlords)
-- Manage user status (ban/unban)
-- View all listings and rental requests
-- Manage property categories
+- View all users
+- Manage user status
+- View all complaint and service request
+- Manage service and complaint categories
 
 ---
 
@@ -62,13 +55,15 @@ City Complaint & Service is a backend API for a rental property marketplace. Lan
 
 ### Backend
 
-| Technology        | Purpose        |
-| ----------------- | -------------- |
-| Node.js + Express | REST API       |
-| TypeScript        | Type safety    |
-| Postgres          | Database       |
-| Prisma            | ORM            |
-| JWT               | Authentication |
+| Technology        | Purpose     |
+| ----------------- | ----------- |
+| Node.js + Express | REST API    |
+| TypeScript        | Type safety |
+| Postgres          | Database    |
+| Prisma            | ORM         |
+
+| JWT
+|ZOD | data validation |
 
 ---
 
@@ -82,4 +77,4 @@ City Complaint & Service is a backend API for a rental property marketplace. Lan
 
 ---
 
-## Live Backend Link: https://rent-nest-backend-gamma.vercel.app
+## Live Backend Link:

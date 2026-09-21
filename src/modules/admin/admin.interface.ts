@@ -16,3 +16,13 @@ export interface IUserStatusUpdate {
   userId: string;
   status: UserStatus;
 }
+
+export interface IComplaintAssignToStaff {
+  complaintId: string;
+  staffId: string;
+}
+
+export interface IServiceRequestAssignToStaff {
+  serviceRequestId: string;
+  staffId: string;
+}

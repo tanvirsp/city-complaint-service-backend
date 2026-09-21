@@ -1,6 +1,11 @@
 import bcrypt from "bcryptjs";
 import { prisma } from "../../lib/prisma";
-import { IAddStaff, IUserStatusUpdate } from "./admin.interface";
+import {
+  IAddStaff,
+  IComplaintAssignToStaff,
+  IServiceRequestAssignToStaff,
+  IUserStatusUpdate,
+} from "./admin.interface";
 import config from "../../config";
 import { IQuery } from "../../interfaces";
 import {
@@ -60,7 +65,6 @@ const getAllComplaint = async (query: IQuery) => {
   if (query.status) {
     andConditions.push({
       status: query.status as ComplaintStatus,
-      // status: { equals: query.status, mode: "insensitive" },
     });
   }
 
@@ -169,10 +173,48 @@ const allUsers = async () => {
   return result;
 };
 
+const assignComplaintToStaff = async (payload: IComplaintAssignToStaff) => {
+  const { complaintId, staffId } = payload;
+  const result = await prisma.complaint.update({
+    where: {
+      id: complaintId,
+    },
+    data: {
+      staffId,
+      status: "ASSIGNED",
+    },
+  });
+
+  return result;
+};
+
+const assignServiceRequestToStaff = async (
+  payload: IServiceRequestAssignToStaff,
+) => {
+  const { serviceRequestId, staffId } = payload;
+  const result = await prisma.serviceRequest.update({
+    where: {
+      id: serviceRequestId,
+    },
+    data: {
+      staffId,
+      status: "ASSIGNED",
+    },
+    include: {
+      payment: true,
+      staff: true,
+    },
+  });
+
+  return result;
+};
+
 export const adminService = {
   addNewStaff,
   getAllComplaint,
   getAllServiceRequest,
   updateUserStatus,
   allUsers,
+  assignComplaintToStaff,
+  assignServiceRequestToStaff,
 };

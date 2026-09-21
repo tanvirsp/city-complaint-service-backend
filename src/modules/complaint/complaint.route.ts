@@ -47,11 +47,4 @@ router.patch(
   complaintController.completeComplaint,
 );
 
-router.patch(
-  "/assign-to-staff",
-  auth(Role.ADMIN),
-  validateRequest(complaintValidation.AssignToStaffZodSchema),
-  complaintController.assignComplaintToStaff,
-);
-
 export const complaintRoutes = router;

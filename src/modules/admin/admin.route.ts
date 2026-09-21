@@ -2,6 +2,8 @@ import { Router } from "express";
 import { adminController } from "./admin.controller";
 import { auth } from "../../middlewares/auth";
 import { Role } from "../../../generated/prisma/enums";
+import { validateRequest } from "../../middlewares/validateRequest";
+import { adminValidation } from "./admin.validation";
 
 const router = Router();
 
@@ -18,6 +20,20 @@ router.patch(
   "/user/update-status",
   auth(Role.ADMIN),
   adminController.updateUserStatus,
+);
+
+router.patch(
+  "/complaint/assign-staff",
+  auth(Role.ADMIN),
+  validateRequest(adminValidation.ComplaintAssignToStaffZodSchema),
+  adminController.assignComplaintToStaff,
+);
+
+router.patch(
+  "/service-request/assign-staff",
+  auth(Role.ADMIN),
+  validateRequest(adminValidation.ServiceAssignToStaffZodSchema),
+  adminController.assignServiceRequestToStaff,
 );
 
 export const adminRoutes = router;

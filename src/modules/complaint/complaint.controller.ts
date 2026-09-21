@@ -101,21 +101,6 @@ const completeComplaint = catchAsync(
   },
 );
 
-const assignComplaintToStaff = catchAsync(
-  async (req: Request, res: Response, next: NextFunction) => {
-    const payload = req.body;
-
-    const result = await complaintService.assignComplaintToStaff(payload);
-
-    sendResponse(res, {
-      success: true,
-      statusCode: httpStatus.CREATED,
-      message: "Complaint assign to staff successfully",
-      data: result,
-    });
-  },
-);
-
 const updateComplaint = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const payload = req.body;
@@ -141,6 +126,5 @@ export const complaintController = {
   complaintDetails,
   complaintUpdateStatus,
   completeComplaint,
-  assignComplaintToStaff,
   updateComplaint,
 };
