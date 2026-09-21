@@ -12,7 +12,8 @@ const registerUser = catchAsync(
     sendResponse(res, {
       success: true,
       statusCode: httpStatus.CREATED,
-      message: "User registered successfully",
+      message:
+        "An OPT sent to your mail. Kindly check your mail and verify that",
       data: user,
     });
   },

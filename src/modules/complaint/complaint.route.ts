@@ -3,6 +3,8 @@ import { complaintController } from "./complaint.controller";
 import { auth } from "../../middlewares/auth";
 import { Role } from "../../../generated/prisma/enums";
 import { upload } from "../../lib/multer";
+import { validateRequest } from "../../middlewares/validateRequest";
+import { complaintValidation } from "./complaint.validation";
 
 const router = Router();
 
@@ -27,6 +29,7 @@ router.get(
 router.patch(
   "/update-status",
   auth(Role.STAFF),
+  validateRequest(complaintValidation.ComplaintUpdateZodSchema),
   complaintController.complaintUpdateStatus,
 );
 
@@ -40,6 +43,7 @@ router.patch(
 router.patch(
   "/assign-to-staff",
   auth(Role.ADMIN),
+  validateRequest(complaintValidation.AssignToStaffZodSchema),
   complaintController.assignComplaintToStaff,
 );
 
