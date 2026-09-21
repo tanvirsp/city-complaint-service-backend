@@ -2,13 +2,16 @@ import { UploadApiResponse } from "cloudinary";
 import { prisma } from "../../lib/prisma";
 import { cloudinary } from "../../lib/cloudinary";
 import { IRequestUser } from "../../middlewares/auth";
+import httpStatus from "http-status";
 import {
   IAssignToStaff,
   IComplainCreate,
+  IComplainUpdate,
   IStatusUpdate,
 } from "./complaint.interface";
 import { IQuery } from "../../interfaces";
 import { ComplaintWhereInput } from "../../../generated/prisma/models";
+import { AppError } from "../../utils/AppErrors";
 
 const addComplaint = async (
   payload: IComplainCreate,
@@ -180,6 +183,32 @@ const assignComplaintToStaff = async (payload: IAssignToStaff) => {
   return result;
 };
 
+const updateComplaint = async (payload: IComplainUpdate, userId: string) => {
+  const { id, ...restData } = payload;
+  const ownRecord = await prisma.complaint.findFirst({
+    where: {
+      id,
+      userId,
+    },
+  });
+
+  if (!ownRecord) {
+    throw new AppError(
+      httpStatus.NOT_FOUND,
+      "This is not your complaint check Id please!",
+    );
+  }
+
+  const result = await prisma.complaint.update({
+    where: {
+      id: id,
+    },
+    data: restData,
+  });
+
+  return result;
+};
+
 export const complaintService = {
   addComplaint,
   myComplaint,
@@ -187,4 +216,5 @@ export const complaintService = {
   complaintUpdateStatus,
   completeComplaint,
   assignComplaintToStaff,
+  updateComplaint,
 };

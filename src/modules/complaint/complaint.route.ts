@@ -14,6 +14,13 @@ router.post(
   upload.single("complaintImage"),
   complaintController.addComplaint,
 );
+
+router.patch(
+  "/update-complaint",
+  auth(Role.CITIZEN),
+  complaintController.updateComplaint, // working on
+);
+
 router.get(
   "/my-complaint",
   auth(Role.CITIZEN),

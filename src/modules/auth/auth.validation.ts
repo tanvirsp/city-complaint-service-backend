@@ -18,7 +18,7 @@ const CitizenEmailVerifyZodSchema = z.object({
 
 const LoginZodSchema = z.object({
   email: z.email(),
-  password: z.string().min(6, "Password Must Minimum 6 Characters Long."),
+  password: z.string(),
 });
 
 const ForgotPasswordZodSchema = z.object({

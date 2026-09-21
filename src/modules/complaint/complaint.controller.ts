@@ -116,6 +116,25 @@ const assignComplaintToStaff = catchAsync(
   },
 );
 
+const updateComplaint = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const payload = req.body;
+    const useerId = req.user?.id;
+
+    const result = await complaintService.updateComplaint(
+      payload,
+      useerId as string,
+    );
+
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.CREATED,
+      message: "Complaint update successfully",
+      data: result,
+    });
+  },
+);
+
 export const complaintController = {
   addComplaint,
   myComplaint,
@@ -123,4 +142,5 @@ export const complaintController = {
   complaintUpdateStatus,
   completeComplaint,
   assignComplaintToStaff,
+  updateComplaint,
 };

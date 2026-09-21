@@ -8,6 +8,15 @@ export interface IComplainCreate {
   priority: Priority;
 }
 
+export interface IComplainUpdate {
+  id: string;
+  title: string;
+  categoryId: string;
+  description: string;
+  location: string;
+  priority: Priority;
+}
+
 export interface IStatusUpdate {
   id: string;
   status: ComplaintStatus;
