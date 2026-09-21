@@ -1,4 +1,4 @@
-import { Role } from "../../../generated/prisma/enums";
+import { Role, UserStatus } from "../../../generated/prisma/enums";
 
 export interface IAddStaff {
   name: string;
@@ -10,4 +10,9 @@ export interface IAddStaff {
   contactNumber?: string;
   password: string;
   role: Role;
+}
+
+export interface IUserStatusUpdate {
+  userId: string;
+  status: UserStatus;
 }

@@ -1,6 +1,6 @@
 import bcrypt from "bcryptjs";
 import { prisma } from "../../lib/prisma";
-import { IAddStaff } from "./admin.interface";
+import { IAddStaff, IUserStatusUpdate } from "./admin.interface";
 import config from "../../config";
 import { IQuery } from "../../interfaces";
 import {
@@ -151,8 +151,28 @@ const getAllServiceRequest = async (query: IQuery) => {
   };
 };
 
+const updateUserStatus = async (payload: IUserStatusUpdate) => {
+  const { userId, status } = payload;
+  const result = await prisma.user.update({
+    where: { id: userId },
+    data: {
+      status: status,
+    },
+  });
+
+  return result;
+};
+
+const allUsers = async () => {
+  const result = await prisma.user.findMany({});
+
+  return result;
+};
+
 export const adminService = {
   addNewStaff,
   getAllComplaint,
   getAllServiceRequest,
+  updateUserStatus,
+  allUsers,
 };

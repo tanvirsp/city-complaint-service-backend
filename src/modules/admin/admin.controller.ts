@@ -44,8 +44,38 @@ const getAllServiceRequest = catchAsync(
   },
 );
 
+const allUsers = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const payload = req.body;
+    const result = await adminService.allUsers();
+
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.CREATED,
+      message: "All user retrieved successfully",
+      data: result,
+    });
+  },
+);
+
+const updateUserStatus = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const payload = req.body;
+    const result = await adminService.updateUserStatus(payload);
+
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.CREATED,
+      message: "User status updated successfully",
+      data: result,
+    });
+  },
+);
+
 export const adminController = {
   addNewStaff,
   getAllComplaint,
   getAllServiceRequest,
+  allUsers,
+  updateUserStatus,
 };
