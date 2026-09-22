@@ -55,15 +55,13 @@ City Complaint & Service is a backend API for a service and complaint Agency. Ci
 
 ### Backend
 
-| Technology        | Purpose     |
-| ----------------- | ----------- |
-| Node.js + Express | REST API    |
-| TypeScript        | Type safety |
-| Postgres          | Database    |
-| Prisma            | ORM         |
-
-| JWT
-|ZOD | data validation |
+| Technology        | Purpose         |
+| ----------------- | --------------- |
+| Node.js + Express | REST API        |
+| TypeScript        | Type safety     |
+| Postgres          | Database        |
+| Prisma            | ORM             |
+| JWT, ZOD          | data validation |
 
 ---
 
@@ -77,4 +75,4 @@ City Complaint & Service is a backend API for a service and complaint Agency. Ci
 
 ---
 
-## Live Backend Link:
+## Live Backend Link: https://city-complaint-service-backend-a6.vercel.app
