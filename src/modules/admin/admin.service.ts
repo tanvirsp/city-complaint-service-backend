@@ -168,8 +168,20 @@ const updateUserStatus = async (payload: IUserStatusUpdate) => {
 };
 
 const allUsers = async () => {
-  const result = await prisma.user.findMany({});
+  const result = await prisma.user.findMany({
+    where: {
+      role: "CITIZEN",
+    },
+  });
+  return result;
+};
 
+const allStaff = async () => {
+  const result = await prisma.user.findMany({
+    where: {
+      role: "STAFF",
+    },
+  });
   return result;
 };
 
@@ -217,4 +229,5 @@ export const adminService = {
   allUsers,
   assignComplaintToStaff,
   assignServiceRequestToStaff,
+  allStaff,
 };

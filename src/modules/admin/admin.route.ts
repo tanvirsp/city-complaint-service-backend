@@ -16,6 +16,9 @@ router.get(
 );
 
 router.get("/users", auth(Role.ADMIN), adminController.allUsers);
+
+router.get("/staff", auth(Role.ADMIN), adminController.allStaff);
+
 router.patch(
   "/user/update-status",
   auth(Role.ADMIN),

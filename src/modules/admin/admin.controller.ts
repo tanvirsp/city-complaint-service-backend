@@ -46,13 +46,25 @@ const getAllServiceRequest = catchAsync(
 
 const allUsers = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const payload = req.body;
     const result = await adminService.allUsers();
 
     sendResponse(res, {
       success: true,
       statusCode: httpStatus.CREATED,
       message: "All user retrieved successfully",
+      data: result,
+    });
+  },
+);
+
+const allStaff = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const result = await adminService.allStaff();
+
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.CREATED,
+      message: "All staff retrieved successfully",
       data: result,
     });
   },
@@ -110,4 +122,5 @@ export const adminController = {
   updateUserStatus,
   assignComplaintToStaff,
   assignServiceRequestToStaff,
+  allStaff,
 };
