@@ -97,13 +97,31 @@ const updateServiceRequest = async (
   userId: string,
   payload: IServiceRequestUpdate,
 ) => {
-  const { serviceRequestId, ...restData } = payload;
+  const { serviceId, title, address, contactNumber, serviceRequestId } =
+    payload;
+
+  const service = await prisma.service.findFirst({
+    where: {
+      id: serviceId,
+    },
+  });
+
+  if (!service) {
+    throw new AppError(httpStatus.NOT_FOUND, "Service Not Found");
+  }
+
   const result = await prisma.serviceRequest.update({
     where: {
       id: serviceRequestId,
       userId: userId,
     },
-    data: restData,
+    data: {
+      id: serviceRequestId,
+      title,
+      address,
+      contactNumber,
+      serviceFee: service.serviceFee,
+    },
   });
 
   return result;
