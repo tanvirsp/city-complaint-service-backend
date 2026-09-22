@@ -2,6 +2,7 @@ import cookieParser from "cookie-parser";
 import express, { Application, Request, Response } from "express";
 import cors from "cors";
 import config from "./config";
+import { rateLimit } from "express-rate-limit";
 
 import { authRoutes } from "./modules/auth/auth.route";
 import { notFound } from "./middlewares/notFound";
@@ -22,12 +23,18 @@ app.use(
     origin: [
       config.app_url as string,
       "http://localhost:3000",
-      "https://rent-nest-frontend-d9fl.vercel.app",
+      "https://city-complaint-service-backend-a6.vercel.app",
     ],
     credentials: true,
   }),
 );
 
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 2000, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
+});
+
+app.use(limiter);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
