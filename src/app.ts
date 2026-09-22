@@ -40,7 +40,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.get("/", (req: Request, res: Response) => {
-  res.send("City Complaint & Service Platform Running");
+  res.send("City Complaint & Service Platform Running update-2");
 });
 
 //routes

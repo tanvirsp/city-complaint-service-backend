@@ -12,9 +12,25 @@ const addServiceRequest = async (
   payload: IServiceRequestCreate,
   userId: string,
 ) => {
+  const { serviceId, title, address, contactNumber } = payload;
+
+  const service = await prisma.service.findFirst({
+    where: {
+      id: serviceId,
+    },
+  });
+
+  if (!service) {
+    throw new AppError(httpStatus.NOT_FOUND, "Service Not Found");
+  }
+
   const result = await prisma.serviceRequest.create({
     data: {
-      ...payload,
+      title,
+      address,
+      contactNumber,
+      serviceId,
+      serviceFee: service.serviceFee,
       userId,
     },
   });
