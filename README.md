@@ -12,11 +12,11 @@ City Complaint & Service is a backend API for a service and complaint Agency. Ci
 
 ## Roles & Permissions
 
-| Role        | Description                          | Key Permissions                                                                      |
-| ----------- | ------------------------------------ | ------------------------------------------------------------------------------------ |
-| **CITIZEN** | Users looking for service properties | order service or complaint                                                           |
-| **STAFF**   | service provider                     | complete the service or complaint                                                    |
-| **ADMIN**   | Platform moderators                  | Manage all users, oversee all serivices and complaint requests and manage categories |
+| Role        | Description               | Key Permissions                                                                      |
+| ----------- | ------------------------- | ------------------------------------------------------------------------------------ |
+| **CITIZEN** | Users looking for service | order service or complaint                                                           |
+| **STAFF**   | service provider          | complete the service or complaint                                                    |
+| **ADMIN**   | Platform moderators       | Manage all users, oversee all serivices and complaint requests and manage categories |
 
 > 💡 **Note**: ADMIN can create STAFF .
 
