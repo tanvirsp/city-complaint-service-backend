@@ -1,7 +1,12 @@
 import { ServiceRequestWhereInput } from "../../../generated/prisma/models";
 import { IQuery } from "../../interfaces";
 import { prisma } from "../../lib/prisma";
-import { IServiceRequestCreate } from "./serviceRequest.interface";
+import { AppError } from "../../utils/AppErrors";
+import httpStatus from "http-status";
+import {
+  IServiceRequestCreate,
+  IServiceRequestUpdate,
+} from "./serviceRequest.interface";
 
 const addServiceRequest = async (
   payload: IServiceRequestCreate,
@@ -58,7 +63,75 @@ const myServiceRequest = async (userId: string, query: IQuery) => {
   };
 };
 
+const detailsServiceRequest = async (
+  userId: string,
+  serviceRequestId: string,
+) => {
+  const result = await prisma.serviceRequest.findFirst({
+    where: {
+      id: serviceRequestId,
+      userId: userId,
+    },
+  });
+
+  return result;
+};
+
+const updateServiceRequest = async (
+  userId: string,
+  payload: IServiceRequestUpdate,
+) => {
+  const { serviceRequestId, ...restData } = payload;
+  const result = await prisma.serviceRequest.update({
+    where: {
+      id: serviceRequestId,
+      userId: userId,
+    },
+    data: restData,
+  });
+
+  return result;
+};
+
+const deleteServiceRequest = async (
+  userId: string,
+  serviceRequestId: string,
+) => {
+  const data = await prisma.serviceRequest.findFirst({
+    where: {
+      id: serviceRequestId,
+      userId: userId,
+    },
+  });
+
+  if (!data) {
+    throw new AppError(
+      httpStatus.NOT_FOUND,
+      "Sorry service request not found. Check service request Id.",
+    );
+  }
+
+  if (data.status !== "PENDING") {
+    throw new AppError(
+      httpStatus.UNAUTHORIZED,
+      "Sorry you can not delete now, because it's on going.",
+    );
+  }
+
+  const result = await prisma.serviceRequest.delete({
+    where: {
+      id: serviceRequestId,
+      userId: userId,
+    },
+  });
+
+  return result;
+};
+
 export const serviceRequestService = {
   addServiceRequest,
   myServiceRequest,
+  detailsServiceRequest,
+  updateServiceRequest,
+  deleteServiceRequest,
 };

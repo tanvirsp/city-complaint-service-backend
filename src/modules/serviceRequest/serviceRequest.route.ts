@@ -20,4 +20,23 @@ router.get(
   serviceRequestController.myServiceRequest,
 );
 
+router.get(
+  "/details/:id",
+  auth(Role.CITIZEN, Role.STAFF, Role.ADMIN),
+  serviceRequestController.detailsServiceRequest,
+);
+
+router.patch(
+  "/",
+  auth(Role.CITIZEN, Role.STAFF, Role.ADMIN),
+  validateRequest(serviceRequestValidation.ServiceRequestUpdateZodSchema),
+  serviceRequestController.updateServiceRequest,
+);
+
+router.delete(
+  "/:id",
+  auth(Role.CITIZEN),
+  serviceRequestController.deleteServiceRequest,
+);
+
 export const serviceRequestRoutes = router;
