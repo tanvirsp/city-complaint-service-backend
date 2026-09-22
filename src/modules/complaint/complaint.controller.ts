@@ -81,8 +81,6 @@ const completeComplaint = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const payload = JSON.parse(req.body.data);
 
-    // const user = req.user!;
-
     if (!req.file) {
       throw new AppError(httpStatus.BAD_REQUEST, "No Image Provided.");
     }

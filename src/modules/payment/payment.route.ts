@@ -18,7 +18,7 @@ router.post("/success", paymentController.paymentSuccess);
 router.post("/fail", paymentController.paymentFail);
 router.post("/cancel", paymentController.paymentCancel);
 
-router.get("/my", paymentController.paymentHistory);
+router.get("/my", auth(Role.CITIZEN), paymentController.paymentHistory);
 router.get(
   "/:id",
   auth(Role.CITIZEN, Role.ADMIN),

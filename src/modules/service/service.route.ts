@@ -13,7 +13,7 @@ router.post(
   validateRequest(serviceValidation.ServiceCreateZodSchema),
   serviceController.createService,
 );
-router.get("/", auth(Role.ADMIN), serviceController.serviceList);
+router.get("/", serviceController.serviceList);
 router.patch(
   "/",
   auth(Role.ADMIN),
