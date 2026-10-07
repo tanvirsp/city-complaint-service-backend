@@ -29,4 +29,16 @@ export default {
 
   ssl_commerz_store_id: process.env.SSL_COMMERZ_STORE_ID!,
   ssl_commerz_store_password: process.env.SSL_COMMERZ_STORE_PASSWORD!,
+
+  tester_admin_name: process.env.TESTER_ADMIN_NAME!,
+  tester_admin_email: process.env.TESTER_ADMIN_EMAIL!,
+  tester_admin_password: process.env.TESTER_ADMIN_PASSWORD!,
+
+  tester_staff_name: process.env.TESTER_STAFF_NAME!,
+  tester_staff_email: process.env.TESTER_STAFF_EMAIL!,
+  tester_staff_password: process.env.TESTER_STAFF_PASSWORD!,
+
+  tester_citizen_name: process.env.TESTER_CITIZEN_NAME!,
+  tester_citizen_email: process.env.TESTER_CITIZEN_EMAIL!,
+  tester_citizen_password: process.env.TESTER_CITIZEN_PASSWORD!,
 };

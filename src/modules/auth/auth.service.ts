@@ -184,7 +184,7 @@ const verifyCitizenEmail = async (payload: IVerifyEmailPayload) => {
 
   const { citizen, ...user } = createdUser;
   const jwtPayload = {
-    userId: user.id,
+    id: user.id,
     name: user.name,
     email: user.email,
     role: user.role,
@@ -421,7 +421,7 @@ const googleLogin = async (payload: IGoogleLoginPayload) => {
   }
 
   const jwtPayload = {
-    userId: user.id,
+    id: user.id,
     name: user.name,
     email: user.email,
     role: user.role,

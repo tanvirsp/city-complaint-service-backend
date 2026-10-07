@@ -84,6 +84,7 @@ const getAllComplaint = async (query: IQuery) => {
           password: true,
         },
       },
+      category: true,
     },
   });
 
@@ -168,18 +169,27 @@ const updateUserStatus = async (payload: IUserStatusUpdate) => {
 };
 
 const allUsers = async () => {
-  const result = await prisma.user.findMany({
-    where: {
-      role: "CITIZEN",
+  const result = await prisma.citizen.findMany({
+    include: {
+      user: {
+        omit: {
+          password: true,
+        },
+      },
     },
   });
   return result;
 };
 
 const allStaff = async () => {
-  const result = await prisma.user.findMany({
-    where: {
-      role: "STAFF",
+  const result = await prisma.staff.findMany({
+    include: {
+      category: true,
+      user: {
+        omit: {
+          password: true,
+        },
+      },
     },
   });
   return result;
@@ -221,6 +231,24 @@ const assignServiceRequestToStaff = async (
   return result;
 };
 
+const rejectComplaint = async (payload: {
+  complaintId: string;
+  rejectReason: string;
+}) => {
+  const { complaintId, rejectReason } = payload;
+  const result = await prisma.complaint.update({
+    where: {
+      id: complaintId,
+    },
+    data: {
+      rejectReason,
+      status: "REJECTED",
+    },
+  });
+
+  return result;
+};
+
 export const adminService = {
   addNewStaff,
   getAllComplaint,
@@ -230,4 +258,5 @@ export const adminService = {
   assignComplaintToStaff,
   assignServiceRequestToStaff,
   allStaff,
+  rejectComplaint,
 };

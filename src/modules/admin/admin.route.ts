@@ -33,6 +33,12 @@ router.patch(
 );
 
 router.patch(
+  "/complaint/reject",
+  auth(Role.ADMIN),
+  adminController.rejectComplaint,
+);
+
+router.patch(
   "/service-request/assign-staff",
   auth(Role.ADMIN),
   validateRequest(adminValidation.ServiceAssignToStaffZodSchema),

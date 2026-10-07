@@ -114,6 +114,21 @@ const assignServiceRequestToStaff = catchAsync(
   },
 );
 
+const rejectComplaint = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const payload = req.body;
+
+    const result = await adminService.rejectComplaint(payload);
+
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "Assign rejected successfully",
+      data: result,
+    });
+  },
+);
+
 export const adminController = {
   addNewStaff,
   getAllComplaint,
@@ -123,4 +138,5 @@ export const adminController = {
   assignComplaintToStaff,
   assignServiceRequestToStaff,
   allStaff,
+  rejectComplaint,
 };

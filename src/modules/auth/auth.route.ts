@@ -21,8 +21,13 @@ router.post(
   validateRequest(userValidation.LoginZodSchema),
   authController.loginUser,
 );
+
 router.post("/refresh-token", authController.refreshToken);
+
 router.post("/google", authController.googleLogin);
+
+router.post("/logout", authController.logoutUser);
+
 router.post(
   "/forget-password",
   validateRequest(userValidation.ForgotPasswordZodSchema),
