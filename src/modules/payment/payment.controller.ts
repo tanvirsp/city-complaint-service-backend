@@ -4,6 +4,7 @@ import { sendResponse } from "../../utils/sendResponse";
 import { catchAsync } from "../../utils/catchAsync";
 import { paymentService } from "./payment.service";
 import { JwtPayload } from "jsonwebtoken";
+import config from "../../config";
 
 const createPayment = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -30,16 +31,16 @@ const paymentSuccess = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const payment = await paymentService.paymentSuccess(req.body);
 
-    sendResponse(res, {
-      success: true,
-      statusCode: httpStatus.OK,
-      message: "Payment Verify successfully",
-      data: {},
-    });
+    // sendResponse(res, {
+    //   success: true,
+    //   statusCode: httpStatus.OK,
+    //   message: "Payment Verify successfully",
+    //   data: {},
+    // });
 
-    // return res.redirect(
-    //   `https://rent-nest-frontend-d9fl.vercel.app/payment/success?paymentId=${payment.id}`,
-    // );
+    return res.redirect(
+      `http://localhost:3000/citizen/payment/success?paymentId=${payment.id}`,
+    );
   },
 );
 
@@ -58,22 +59,20 @@ const paymentFail = catchAsync(
 
 const paymentCancel = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    sendResponse(res, {
-      success: false,
-      statusCode: httpStatus.BAD_REQUEST,
-      message: "Your payment has been cancel",
-      data: "",
-    });
-    // return res.redirect(
-    //   `https://rent-nest-frontend-d9fl.vercel.app/payment/cancel`,
-    // );
+    // sendResponse(res, {
+    //   success: false,
+    //   statusCode: httpStatus.BAD_REQUEST,
+    //   message: "Your payment has been cancel",
+    //   data: "",
+    // });
+    return res.redirect(`http://localhost:3000/citizen/payment/cancel`);
   },
 );
 
 const paymentHistory = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const userId = req.user?.id as string;
-    const result = await paymentService.paymentHistory(userId);
+    const result = await paymentService.paymentHistory(userId, req.query);
 
     sendResponse(res, {
       success: true,

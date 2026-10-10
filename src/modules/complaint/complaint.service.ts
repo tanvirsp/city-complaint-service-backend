@@ -11,6 +11,7 @@ import {
 import { IQuery } from "../../interfaces";
 import { ComplaintWhereInput } from "../../../generated/prisma/models";
 import { AppError } from "../../utils/AppErrors";
+import { ComplaintStatus } from "../../../generated/prisma/enums";
 
 const addComplaint = async (
   payload: IComplainCreate,
@@ -64,6 +65,13 @@ const myComplaint = async (userId: string, query: IQuery) => {
     });
   }
 
+  //filtering
+  if (query.status) {
+    andConditions.push({
+      status: query.status as ComplaintStatus,
+    });
+  }
+
   const allComplaint = await prisma.complaint.findMany({
     where: {
       AND: andConditions,
@@ -74,7 +82,16 @@ const myComplaint = async (userId: string, query: IQuery) => {
       createdAt: "desc",
     },
     include: {
-      staff: true,
+      staff: {
+        omit: {
+          isDeleted: true,
+          deletedAt: true,
+          createdAt: true,
+          updatedAt: true,
+          userId: true,
+          bio: true,
+        },
+      },
     },
   });
 
@@ -108,6 +125,7 @@ const complaintDetails = async (complaintId: string) => {
           email: true,
         },
       },
+      category: true,
     },
   });
 

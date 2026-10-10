@@ -21,4 +21,7 @@ router.patch(
   serviceController.upateService,
 );
 
+router.delete("/", auth(Role.ADMIN), serviceController.deleteService);
+router.get("/service-by-id/:serviceId", serviceController.serviceById);
+
 export const serviceRoutes = router;

@@ -5,6 +5,7 @@ model ServiceRequest {
     address       String
     contactNumber String
     status        ServiceStatus @default(PENDING)
+    paymentStatus PaymentStatus @default(UNPAID)
 
     userId     String
     user       User    @relation(fields: [userId], references: [id], onDelete: Restrict)

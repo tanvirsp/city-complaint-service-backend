@@ -7,6 +7,7 @@ import {
   IServiceRequestCreate,
   IServiceRequestUpdate,
 } from "./serviceRequest.interface";
+import { ServiceStatus } from "../../../generated/prisma/enums";
 
 const addServiceRequest = async (
   payload: IServiceRequestCreate,
@@ -51,6 +52,13 @@ const myServiceRequest = async (userId: string, query: IQuery) => {
     });
   }
 
+  //filtering
+  if (query.status) {
+    andConditions.push({
+      status: query.status as ServiceStatus,
+    });
+  }
+
   const allServiceRequest = await prisma.serviceRequest.findMany({
     where: {
       AND: andConditions,
@@ -59,6 +67,9 @@ const myServiceRequest = async (userId: string, query: IQuery) => {
     skip: skip,
     orderBy: {
       createdAt: "desc",
+    },
+    include: {
+      staff: true,
     },
   });
 
@@ -87,6 +98,11 @@ const detailsServiceRequest = async (
     where: {
       id: serviceRequestId,
       userId: userId,
+    },
+    include: {
+      staff: true,
+      service: true,
+      payment: true,
     },
   });
 

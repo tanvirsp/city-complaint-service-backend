@@ -91,7 +91,7 @@ export const seedTesterStaff = async () => {
 
     const categoryCreate = await prisma.category.create({
       data: {
-        name: "Default",
+        name: "Other",
         type: "COMPLAINT",
       },
     });

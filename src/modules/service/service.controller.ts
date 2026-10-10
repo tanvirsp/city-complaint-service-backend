@@ -46,8 +46,39 @@ const upateService = catchAsync(
   },
 );
 
+const deleteService = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const serviceId = req.body.serviceId;
+    const result = await serviceService.deleteService(serviceId);
+
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.CREATED,
+      message: "Service update successfully",
+      data: result,
+    });
+  },
+);
+
+const serviceById = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const serviceId = req.params?.serviceId;
+
+    const result = await serviceService.serviceById(serviceId as string);
+
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.CREATED,
+      message: "Get Service details successfully",
+      data: result,
+    });
+  },
+);
+
 export const serviceController = {
   createService,
   serviceList,
   upateService,
+  deleteService,
+  serviceById,
 };

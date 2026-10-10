@@ -2,11 +2,11 @@ import { prisma } from "../../lib/prisma";
 import { ICreateCategory, IUpdateCategory } from "./category.interface";
 
 const createCategory = async (payload: ICreateCategory) => {
-  const { name, type } = payload;
+  const { name } = payload;
   const result = await prisma.category.create({
     data: {
       name,
-      type,
+      type: "COMPLAINT",
     },
   });
 
@@ -14,7 +14,11 @@ const createCategory = async (payload: ICreateCategory) => {
 };
 
 const getCategories = async () => {
-  const result = await prisma.category.findMany({});
+  const result = await prisma.category.findMany({
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
 
   return result;
 };
@@ -42,9 +46,18 @@ const updateCategory = async (payload: IUpdateCategory) => {
   return result;
 };
 
+const categoryById = async (id: string) => {
+  const result = await prisma.category.findFirst({
+    where: { id: id },
+  });
+
+  return result;
+};
+
 export const categoryService = {
   createCategory,
   getCategories,
   deleteCategory,
   updateCategory,
+  categoryById,
 };

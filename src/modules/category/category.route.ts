@@ -27,4 +27,6 @@ router.patch(
   categoryController.updateCategory,
 );
 
+router.get("/category-by-id/:categoryId", categoryController.categoryById);
+
 export const categoryRoutes = router;

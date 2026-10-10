@@ -6,46 +6,67 @@ import {
 } from "./payment.interface";
 import { prisma } from "../../lib/prisma";
 import { JwtPayload } from "jsonwebtoken";
-import { PaymentProvider } from "../../../generated/prisma/enums";
+import {
+  PaymentProvider,
+  PaymentStatus,
+} from "../../../generated/prisma/enums";
+import { IQuery } from "../../interfaces";
+import { PaymentWhereInput } from "../../../generated/prisma/models";
 
 const initiatePayment = async (serviceRequestId: string, user: JwtPayload) => {
-  //Find Service Request
-
-  const serviceRequest = await prisma.serviceRequest.findUnique({
+  const previousPaymentRecord = await prisma.payment.findUnique({
     where: {
-      id: serviceRequestId,
-    },
-  });
-
-  if (!serviceRequest) {
-    throw new Error("Sorry this service reques is not found");
-  }
-
-  //Find Serfice
-  const service = await prisma.service.findUnique({
-    where: {
-      id: serviceRequest.serviceId,
-    },
-  });
-
-  if (!service) {
-    throw new Error("Sorry that service is not available");
-  }
-
-  const totalAmount = Number(service.serviceFee);
-
-  const tran_id = `TAN${Math.floor(1000000 + Math.random() * 9000000)}`;
-
-  //Create Payment data
-  await prisma.payment.create({
-    data: {
       serviceRequestId,
-      userId: user.id,
-      amount: totalAmount,
-      provider: PaymentProvider.SSLCOMMERZ,
-      transactionId: tran_id,
     },
   });
+
+  let totalAmount;
+  let tran_id;
+
+  if (previousPaymentRecord && previousPaymentRecord?.status == "PAID") {
+    throw new Error("Sorry you alrady paid for this service");
+  }
+
+  if (previousPaymentRecord) {
+    totalAmount = Number(previousPaymentRecord.amount);
+    tran_id = previousPaymentRecord.transactionId;
+  } else {
+    //Find Service Request
+    const serviceRequest = await prisma.serviceRequest.findUnique({
+      where: {
+        id: serviceRequestId,
+      },
+    });
+
+    if (!serviceRequest) {
+      throw new Error("Sorry this service reques is not found");
+    }
+
+    //Find Serfice
+    const service = await prisma.service.findUnique({
+      where: {
+        id: serviceRequest.serviceId,
+      },
+    });
+
+    if (!service) {
+      throw new Error("Sorry that service is not available");
+    }
+
+    totalAmount = Number(service.serviceFee);
+    tran_id = `TAN${Math.floor(1000000 + Math.random() * 9000000)}`;
+
+    //Create Payment data
+    await prisma.payment.create({
+      data: {
+        serviceRequestId,
+        userId: user.id,
+        amount: totalAmount,
+        provider: PaymentProvider.SSLCOMMERZ,
+        transactionId: tran_id,
+      },
+    });
+  }
 
   //SSC Commerz Data
   const storeData = {
@@ -76,6 +97,7 @@ const initiatePayment = async (serviceRequestId: string, user: JwtPayload) => {
   );
 
   const data = await response.data;
+
   return data.GatewayPageURL;
 };
 
@@ -136,12 +158,58 @@ const paymentFail = async (payload: SSLCommerzPaymentFailResponse) => {
   });
 };
 
-const paymentHistory = async (userId: string) => {
-  const result = await prisma.payment.findMany({
-    where: { userId },
+const paymentHistory = async (userId: string, query: IQuery) => {
+  const limit = query.limit ? Number(query.limit) : 10;
+  const page = query.page ? Number(query.page) : 1;
+  const skip = (page - 1) * limit;
+
+  const andConditions: PaymentWhereInput[] = [{ userId: userId }];
+
+  //Searching
+  if (query.searchTerm) {
+    andConditions.push({
+      OR: [
+        { transactionId: { contains: query.searchTerm, mode: "insensitive" } },
+      ],
+    });
+  }
+
+  //filtering
+  if (query.status) {
+    andConditions.push({
+      status: query.status as PaymentStatus,
+    });
+  }
+
+  const allPayment = await prisma.payment.findMany({
+    where: {
+      AND: andConditions,
+    },
+    take: limit,
+    skip: skip,
+    orderBy: {
+      createdAt: "desc",
+    },
+    include: {
+      serviceRequest: true,
+    },
   });
 
-  return result;
+  const totalMyPaymentCount = await prisma.payment.count({
+    where: {
+      AND: andConditions,
+    },
+  });
+
+  return {
+    data: allPayment,
+    meta: {
+      page: page,
+      limit: limit,
+      total: totalMyPaymentCount,
+      totalPages: Math.ceil(totalMyPaymentCount / limit),
+    },
+  };
 };
 
 const paymentDetails = async (paymentId: string) => {
@@ -151,13 +219,6 @@ const paymentDetails = async (paymentId: string) => {
     },
     include: {
       serviceRequest: true,
-      staff: {
-        select: {
-          name: true,
-          address: true,
-          contactNumber: true,
-        },
-      },
     },
   });
 
