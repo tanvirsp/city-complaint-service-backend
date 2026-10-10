@@ -95,10 +95,28 @@ const deleteServiceRequest = catchAsync(
     });
   },
 );
+
+const serviceRequestUpdateStatus = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const payload = req.body;
+
+    const result =
+      await serviceRequestService.serviceRequestUpdateStatus(payload);
+
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.CREATED,
+      message: "Complaint status update successfully",
+      data: result,
+    });
+  },
+);
+
 export const serviceRequestController = {
   addServiceRequest,
   myServiceRequest,
   detailsServiceRequest,
   updateServiceRequest,
   deleteServiceRequest,
+  serviceRequestUpdateStatus,
 };

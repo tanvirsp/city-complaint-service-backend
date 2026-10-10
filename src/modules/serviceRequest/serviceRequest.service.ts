@@ -8,6 +8,7 @@ import {
   IServiceRequestUpdate,
 } from "./serviceRequest.interface";
 import { ServiceStatus } from "../../../generated/prisma/enums";
+import { IStatusUpdate } from "../complaint/complaint.interface";
 
 const addServiceRequest = async (
   payload: IServiceRequestCreate,
@@ -178,10 +179,25 @@ const deleteServiceRequest = async (
   return result;
 };
 
+const serviceRequestUpdateStatus = async (payload: IStatusUpdate) => {
+  const { id, status } = payload;
+  const result = await prisma.serviceRequest.update({
+    where: {
+      id,
+    },
+    data: {
+      status,
+    },
+  });
+
+  return result;
+};
+
 export const serviceRequestService = {
   addServiceRequest,
   myServiceRequest,
   detailsServiceRequest,
   updateServiceRequest,
   deleteServiceRequest,
+  serviceRequestUpdateStatus,
 };

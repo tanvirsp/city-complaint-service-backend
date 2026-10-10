@@ -18,4 +18,6 @@ router.get(
   staffController.myAssignServiceRequest,
 );
 
+router.get("/dashboard", auth(Role.STAFF), staffController.getDashboardData);
+
 export const staffRoutes = router;

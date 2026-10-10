@@ -54,8 +54,23 @@ const updateProfile = catchAsync(
   },
 );
 
+const getDashboardData = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const userId = req.user?.id as string;
+
+    const result = await userServices.getDashboardData(userId);
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "Dashboard data retrieved successfully",
+      data: result,
+    });
+  },
+);
+
 export const userController = {
   uploadProfileImage,
   updateProfile,
   getMyProfile,
+  getDashboardData,
 };

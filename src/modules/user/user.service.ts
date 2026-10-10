@@ -81,8 +81,27 @@ const updateProfile = async (userId: string, payload: IUpdatePayload) => {
   return user;
 };
 
+const getDashboardData = async (userId: string) => {
+  const totalComplaint = await prisma.complaint.count({
+    where: {
+      id: userId,
+    },
+  });
+  const totalServiceRequest = await prisma.serviceRequest.count({
+    where: {
+      id: userId,
+    },
+  });
+
+  return {
+    totalComplaint,
+    totalServiceRequest,
+  };
+};
+
 export const userServices = {
   uploadProfileImage,
   getMyProfile,
   updateProfile,
+  getDashboardData,
 };

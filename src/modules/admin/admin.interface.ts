@@ -7,9 +7,8 @@ export interface IAddStaff {
   categoryId: string;
   experienceYears: number;
   bio?: string;
-  contactNumber?: string;
+  contactNumber: string;
   password: string;
-  role: Role;
 }
 
 export interface IUserStatusUpdate {

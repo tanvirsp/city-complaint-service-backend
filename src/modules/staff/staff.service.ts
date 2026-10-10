@@ -1,3 +1,9 @@
+import { Priority } from "../../../generated/prisma/enums";
+import {
+  ComplaintWhereInput,
+  ServiceRequestWhereInput,
+  StaffWhereInput,
+} from "../../../generated/prisma/models";
 import { IQuery } from "../../interfaces";
 import { prisma } from "../../lib/prisma";
 
@@ -6,11 +12,25 @@ const myAssignComplaints = async (userId: string, query: IQuery) => {
   const page = query.page ? Number(query.page) : 1;
   const skip = (page - 1) * limit;
 
+  const andConditions: ComplaintWhereInput[] = [{ staff: { userId: userId } }];
+
+  //Searching
+  if (query.searchTerm) {
+    andConditions.push({
+      OR: [{ title: { contains: query.searchTerm, mode: "insensitive" } }],
+    });
+  }
+
+  //filtering
+  if (query.priority) {
+    andConditions.push({
+      priority: query.priority as Priority,
+    });
+  }
+
   const allComplaint = await prisma.complaint.findMany({
     where: {
-      staff: {
-        userId,
-      },
+      AND: andConditions,
     },
     take: limit,
     skip: skip,
@@ -23,6 +43,7 @@ const myAssignComplaints = async (userId: string, query: IQuery) => {
           password: true,
         },
       },
+      category: true,
     },
   });
 
@@ -88,8 +109,45 @@ const myAssignServiceRequest = async (userId: string, query: IQuery) => {
     },
   };
 };
+const getDashboardData = async (userId: string) => {
+  const totalAssignComplaint = await prisma.complaint.count({
+    where: {
+      staff: { userId: userId },
+      status: "ASSIGNED",
+    },
+  });
+
+  const totalAssignService = await prisma.serviceRequest.count({
+    where: {
+      staff: { userId: userId },
+      status: "ASSIGNED",
+    },
+  });
+
+  const totalCompleteAssignComplaint = await prisma.complaint.count({
+    where: {
+      staff: { userId: userId },
+      status: "RESOLVED",
+    },
+  });
+
+  const totalCompleteAssignService = await prisma.serviceRequest.count({
+    where: {
+      staff: { userId: userId },
+      status: "RESOLVED",
+    },
+  });
+
+  return {
+    totalAssignComplaint,
+    totalAssignService,
+    totalCompleteAssignComplaint,
+    totalCompleteAssignService,
+  };
+};
 
 export const staffService = {
   myAssignComplaints,
   myAssignServiceRequest,
+  getDashboardData,
 };

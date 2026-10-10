@@ -32,6 +32,12 @@ router.patch(
   adminController.assignComplaintToStaff,
 );
 
+router.get(
+  "/complaint-details/:id",
+  auth(Role.ADMIN),
+  adminController.complaintDetails,
+);
+
 router.patch(
   "/complaint/reject",
   auth(Role.ADMIN),
@@ -44,5 +50,13 @@ router.patch(
   validateRequest(adminValidation.ServiceAssignToStaffZodSchema),
   adminController.assignServiceRequestToStaff,
 );
+
+router.get(
+  "/service-request/details/:id",
+  auth(Role.ADMIN),
+  adminController.detailsServiceRequest,
+);
+
+router.get("/dashboard", auth(Role.ADMIN), adminController.getDashboardData);
 
 export const adminRoutes = router;

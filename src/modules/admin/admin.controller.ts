@@ -129,6 +129,49 @@ const rejectComplaint = catchAsync(
   },
 );
 
+const complaintDetails = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const complaintId = req.params.id;
+
+    const result = await adminService.complaintDetails(complaintId as string);
+
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.CREATED,
+      message: "Complaint details retrieved successfully",
+      data: result,
+    });
+  },
+);
+
+const detailsServiceRequest = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const serviceRequestId = req.params.id as string;
+    const result = await adminService.detailsServiceRequest(serviceRequestId);
+
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.CREATED,
+      message: "Details service request retrieved successfully",
+      data: result,
+    });
+  },
+);
+
+const getDashboardData = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const serviceRequestId = req.params.id as string;
+    const result = await adminService.getDashboardData();
+
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.CREATED,
+      message: "Details service request retrieved successfully",
+      data: result,
+    });
+  },
+);
+
 export const adminController = {
   addNewStaff,
   getAllComplaint,
@@ -139,4 +182,7 @@ export const adminController = {
   assignServiceRequestToStaff,
   allStaff,
   rejectComplaint,
+  complaintDetails,
+  detailsServiceRequest,
+  getDashboardData,
 };

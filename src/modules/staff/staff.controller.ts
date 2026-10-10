@@ -38,7 +38,22 @@ const myAssignServiceRequest = catchAsync(
   },
 );
 
+const getDashboardData = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const userId = req.user?.id;
+    const result = await staffService.getDashboardData(userId as string);
+
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.CREATED,
+      message: "All data retrieved successfully",
+      data: result,
+    });
+  },
+);
+
 export const staffController = {
   myAssignComplaints,
   myAssignServiceRequest,
+  getDashboardData,
 };

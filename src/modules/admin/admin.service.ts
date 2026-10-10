@@ -18,15 +18,8 @@ import {
 } from "../../../generated/prisma/enums";
 
 const addNewStaff = async (payload: IAddStaff) => {
-  const {
-    name,
-    email,
-    categoryId,
-    experienceYears,
-    contactNumber,
-    password,
-    role,
-  } = payload;
+  const { name, email, categoryId, experienceYears, contactNumber, password } =
+    payload;
 
   const hashedPassword = await bcrypt.hash(
     password,
@@ -38,7 +31,7 @@ const addNewStaff = async (payload: IAddStaff) => {
       name,
       email,
       password: hashedPassword,
-      role,
+      role: "STAFF",
       staff: {
         create: {
           name,
@@ -249,6 +242,71 @@ const rejectComplaint = async (payload: {
   return result;
 };
 
+const complaintDetails = async (complaintId: string) => {
+  const result = await prisma.complaint.findFirst({
+    where: {
+      id: complaintId,
+    },
+    include: {
+      staff: true,
+      user: {
+        select: {
+          name: true,
+          email: true,
+        },
+      },
+      category: true,
+    },
+  });
+
+  return result;
+};
+
+const detailsServiceRequest = async (serviceRequestId: string) => {
+  const result = await prisma.serviceRequest.findFirst({
+    where: {
+      id: serviceRequestId,
+    },
+    include: {
+      staff: true,
+      service: true,
+      payment: true,
+    },
+  });
+
+  return result;
+};
+
+const getDashboardData = async () => {
+  const totalUser = await prisma.citizen.count();
+  const totalStaff = await prisma.staff.count();
+  const totalServices = await prisma.service.count();
+  const totalComplaint = await prisma.complaint.count();
+  const totalServiceRequest = await prisma.serviceRequest.count();
+
+  const totalPendingComplaintRequest = await prisma.complaint.count({
+    where: {
+      status: "PENDING",
+    },
+  });
+
+  const totalPendingServiceRequest = await prisma.serviceRequest.count({
+    where: {
+      status: "PENDING",
+    },
+  });
+
+  return {
+    totalUser,
+    totalStaff,
+    totalServices,
+    totalComplaint,
+    totalServiceRequest,
+    totalPendingComplaintRequest,
+    totalPendingServiceRequest,
+  };
+};
+
 export const adminService = {
   addNewStaff,
   getAllComplaint,
@@ -259,4 +317,7 @@ export const adminService = {
   assignServiceRequestToStaff,
   allStaff,
   rejectComplaint,
+  complaintDetails,
+  detailsServiceRequest,
+  getDashboardData,
 };

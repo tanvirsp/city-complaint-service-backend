@@ -141,6 +141,18 @@ const paymentSuccess = async (payload: SSLCommerzSuccessPayload) => {
       paymentMethod: card_type,
     },
   });
+
+  if (updatePayment.status === "PAID") {
+    await prisma.serviceRequest.update({
+      where: {
+        id: updatePayment.serviceRequestId,
+      },
+      data: {
+        paymentStatus: "PAID",
+      },
+    });
+  }
+
   return updatePayment;
 };
 

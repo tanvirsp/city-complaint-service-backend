@@ -39,4 +39,10 @@ router.delete(
   serviceRequestController.deleteServiceRequest,
 );
 
+router.patch(
+  "/update-status",
+  auth(Role.STAFF),
+  serviceRequestController.serviceRequestUpdateStatus,
+);
+
 export const serviceRequestRoutes = router;

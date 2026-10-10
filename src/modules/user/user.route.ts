@@ -25,4 +25,6 @@ router.patch(
   userController.uploadProfileImage,
 );
 
+router.get("/dashboard", auth(Role.CITIZEN), userController.getDashboardData);
+
 export const userRoutes = router;
